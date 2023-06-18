@@ -43,7 +43,7 @@ async def get_post():
 
   subs = [
     "evangelionmemes", "tf2", "smite", "okbuddyretard",
-    "jerma985", "greentext", "okbuddyfortnite", "TrueSTL", "bonehurtingjuice", "whenthe", "Pikmin"
+    "jerma985", "greentext", "okbuddyfortnite", "TrueSTL", "bonehurtingjuice", "Pikmin"
   ]
   filetypes = [".png", ".jpg", ".gif", ".mp4", ".webm"]
   top_posts = []
