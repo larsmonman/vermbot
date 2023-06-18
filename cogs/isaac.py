@@ -31,8 +31,8 @@ class Isaac(commands.Cog):
         yresize = random.randint(int(shortest_length/15), int(shortest_length/4))
         isaac = Image.open("images/isaacCircle.png").resize((xresize, yresize))
         isaac_size = isaac.size
-        xoff = random.randint(isaac_size[0], image_size[0]-isaac_size[0])
-        yoff = random.randint(isaac_size[1], image_size[1]-isaac_size[1])
+        xoff = random.randint(0, image_size[0]-isaac_size[0])
+        yoff = random.randint(0, image_size[1]-isaac_size[1])
 
         image.paste(isaac, (xoff, yoff), mask=isaac)
         image.save("images/temp/image2.png")
