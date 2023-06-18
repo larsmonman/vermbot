@@ -130,7 +130,7 @@ class Music(commands.Cog):
 
 
 
-  #searching the item on Youtube
+  #Search Youtube
   def search_yt(self, item):
     with YoutubeDL(self.YDL_OPTIONS) as ydl:
       try: 
@@ -147,7 +147,7 @@ class Music(commands.Cog):
       m_url = self.music_queue[0][0]['source']
 
       #Remove the first element as you are currently playing it
-      self.music_queue.pop(0)
+      self.current_song = self.music_queue.pop(0)
 
       self.vc.play(discord.PCMVolumeTransformer(original=discord.FFmpegPCMAudio(m_url, **self.FFMPEG_OPTIONS), volume=self.volume), after=lambda e: self.play_next())
     else:
@@ -159,11 +159,11 @@ class Music(commands.Cog):
 
       m_url = self.music_queue[0][0]['source']
           
-      #try to connect to voice channel if you are not already connected
+      #Try to connect to voice channel if you are not already connected
       if self.vc == None or not self.vc.is_connected():
         self.vc = await self.music_queue[0][1].connect()
 
-        #in case we fail to connect
+        #Failed to connect
         if self.vc == None:
           await ctx.send("Could not connect to the voice channel.")
           return
@@ -172,7 +172,7 @@ class Music(commands.Cog):
         
 
       await self.music_queue[0][2].send(f"Now playing: {self.music_queue[0][0]['title']}")
-      #remove the first element as you are currently playing it
+      #Remove the first element as you are currently playing it
       self.current_song = self.music_queue.pop(0)  
       self.vc.play(discord.PCMVolumeTransformer(original=discord.FFmpegPCMAudio(m_url, **self.FFMPEG_OPTIONS), volume=self.volume), after=lambda e: self.play_next())
     else:
