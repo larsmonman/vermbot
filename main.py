@@ -5,31 +5,32 @@ import asyncio
 import os
 from dotenv.main import load_dotenv
 
-#Misc setup
+# Misc setup
 intents = discord.Intents.default()
 intents.message_content = True
 intents.messages = True
 bot = commands.Bot(command_prefix=".", intents=intents)
 load_dotenv()
 
+
 @bot.event
 async def on_ready():
-  print(f'{bot.user} is now online!')
+    print(f'{bot.user} is now online!')
 
 # Load all cogs
 async def load():
-  for filename in os.listdir('./cogs'):
-    if filename.endswith('.py'):
-      await bot.load_extension(f'cogs.{filename[:-3]}')
+    for filename in os.listdir('./cogs'):
+        if filename.endswith('.py'):
+            await bot.load_extension(f'cogs.{filename[:-3]}')
 
 
 async def main():
-  async with bot:
-    await load()
-    await bot.start(os.getenv("TOKEN"))
+    async with bot:
+        await load()
+        await bot.start(os.getenv("TOKEN"))
 
 asyncio.run(main())
 
 
 if __name__ == "__main__":
-  main()
+    main()
