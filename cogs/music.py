@@ -2,6 +2,7 @@ import discord
 from discord import app_commands
 from discord.ext import commands
 from yt_dlp import YoutubeDL
+from collections import deque
 
 
 class Music(commands.Cog):
@@ -15,8 +16,7 @@ class Music(commands.Cog):
         self.vc = None
 
         # [song, voice_channel, text_channel]
-        self.current_song = None
-        self.music_queue = []
+        self.music_queue = deque()
         self.voice_channel = None
         self.YDL_OPTIONS = {'format': 'bestaudio',
                             'noplaylist': 'True', 'youtube_include_dash_manifest': False}
@@ -86,6 +86,7 @@ class Music(commands.Cog):
         else:
             self.vc.stop()
             self.paused = False
+            self.music_queue.popleft()
             await interaction.followup.send("Skipping...")
             await self.play_music(interaction.user.voice.channel)
 
@@ -93,15 +94,12 @@ class Music(commands.Cog):
     async def queue(self, interaction: discord.Interaction):
         await interaction.response.defer(ephemeral=False)
         q = ""
-        for i in range(0, (len(self.music_queue) + 1)):
-            print(self.current_song)
+        for i in range((len(self.music_queue))):
             if i == 0:
-                q += f"**Currently playing:**\n" + \
-                    self.current_song[i]['title'] + "\n\n"
+                q += f"**Currently playing:**\n"
             elif i == 1:
-                q += "**Queue:**\n" + self.music_queue[i-1][0]['title'] + "\n"
-            else:
-                q += self.music_queue[i][0]['title'] + "\n"
+                q += "**Queue:**\n"
+            q += f'''"{self.music_queue[i][0]['title']}"\n'''
 
         if q != "":
             await interaction.followup.send(q)
@@ -115,7 +113,7 @@ class Music(commands.Cog):
             await interaction.followup.send("I must be in a Voice Channel to use this command!")
         elif self.vc != None and self.playing:
             self.vc.stop()
-        self.music_queue = []
+        self.music_queue.clear()
         await interaction.followup.send("Clearing...")
 
     @app_commands.command(name="leave", description="Kick the bot from the voice channel.")
@@ -124,32 +122,30 @@ class Music(commands.Cog):
         if self.vc == None or not self.vc.is_connected():
             await interaction.followup.send("I must be in a Voice Channel to use this command!")
         else:
-            self.music_queue = []
+            self.music_queue.clear()
             self.playing = False
             self.paused = False
             await interaction.followup.send("Leaving...")
             await self.vc.disconnect()
 
     # Search Youtube
-
     def search_yt(self, item):
         with YoutubeDL(self.YDL_OPTIONS) as ydl:
             try:
-                info = ydl.extract_info("ytsearch:%s" %
-                                        item, download=False)['entries'][0]
+                info = ydl.extract_info("ytsearch:%s" % item, download=False)['entries'][0]
             except Exception:
                 return False
 
             return {'source': info["url"], 'title': info['title']}
 
     def play_next(self):
-        if len(self.music_queue) > 0:
+        if len(self.music_queue) > 1:
             self.playing = True
 
-            m_url = self.music_queue[0][0]['source']
+            m_url = self.music_queue[1][0]['source']
 
-            # Remove the first element as you are currently playing it
-            self.current_song = self.music_queue.pop(0)
+            # Remove the last song from queue
+            self.music_queue.popleft()
 
             self.vc.play(discord.PCMVolumeTransformer(original=discord.FFmpegPCMAudio(
                 m_url, **self.FFMPEG_OPTIONS), volume=self.volume), after=lambda e: self.play_next())
@@ -162,7 +158,7 @@ class Music(commands.Cog):
 
             m_url = self.music_queue[0][0]['source']
 
-            # Try to connect to voice channel if you are not already connected
+            # Try to connect to voice channel if it is not already connected
             if self.vc == None or not self.vc.is_connected():
                 self.vc = await self.music_queue[0][1].connect()
 
@@ -173,9 +169,8 @@ class Music(commands.Cog):
             else:
                 await self.vc.move_to(self.music_queue[0][1])
 
-            await self.music_queue[0][2].send(f"Now playing: {self.music_queue[0][0]['title']}")
-            # Remove the first element as you are currently playing it
-            self.current_song = self.music_queue.pop(0)
+            await self.music_queue[0][2].send(f'''Now playing: "{self.music_queue[0][0]['title']}"''')
+
             self.vc.play(discord.PCMVolumeTransformer(original=discord.FFmpegPCMAudio(
                 m_url, **self.FFMPEG_OPTIONS), volume=self.volume), after=lambda e: self.play_next())
         else:

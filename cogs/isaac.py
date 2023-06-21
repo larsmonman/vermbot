@@ -26,17 +26,14 @@ class Isaac(commands.Cog):
 
             # Edit image
             image = Image.open("images/temp/image.png")
-            image_size = image.size
-            shortest_length = min(image_size)
+            shortest_length = min(image.size)
             xresize = random.randint(
-                int(shortest_length/17), int(shortest_length/5))
+                int(shortest_length/12), int(shortest_length/8))
             yresize = random.randint(
-                int(shortest_length/15), int(shortest_length/4))
-            isaac = Image.open(
-                "images/isaacCircle.png").resize((xresize, yresize))
-            isaac_size = isaac.size
-            xoff = random.randint(0, image_size[0]-isaac_size[0])
-            yoff = random.randint(0, image_size[1]-isaac_size[1])
+                int(shortest_length/10), int(shortest_length/7))
+            isaac = Image.open("images/isaacCircle.png").resize((xresize, yresize))
+            xoff = random.randint(0, image.size[0]-isaac.size[0])
+            yoff = random.randint(0, image.size[1]-isaac.size[1])
 
             image.paste(isaac, (xoff, yoff), mask=isaac)
             image.save("images/temp/image2.png")
@@ -46,7 +43,9 @@ class Isaac(commands.Cog):
             file = discord.File("images/temp/image2.png")
             em.set_image(url="attachment://image2.png")
             await interaction.followup.send(file=file, embed=em)
-
+        else:
+            await interaction.followup.send("Could not fetch image.")
+            
 
 async def setup(bot):
     await bot.add_cog(Isaac(bot))
