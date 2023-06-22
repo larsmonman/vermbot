@@ -34,25 +34,25 @@ class Music(commands.Cog):
         voice_channel = interaction.user.voice.channel
         if voice_channel is None:
             await interaction.followup.send("You must be in a Voice Channel to use this command!")
-        else:
-            song = self.search_yt(link)
-            if type(song) == type(True):
-                await interaction.followup.send("Could not download the song, likely a faulty URL. Try again.")
-            else:
-                self.music_queue.append(
-                    [song, voice_channel, interaction.channel])
-                await interaction.followup.send(f'''"{song['title']}" added to the queue.''')
-                voice_channel = None
+            return 0
+        song = self.search_yt(link)
+        if type(song) == type(True):
+            await interaction.followup.send("Could not download the song, likely a faulty URL. Try again.")
+            return 0
+        
+        self.music_queue.append([song, voice_channel, interaction.channel])
+        await interaction.followup.send(f'''"{song['title']}" added to the queue.''')
+        voice_channel = None
 
-                if self.playing == False:
-                    await self.play_music(interaction.user.voice.channel)
+        if self.playing == False:
+            await self.play_music(interaction.user.voice.channel)
 
     @app_commands.command(name="pause", description="Pause the current song.")
     async def pause(self, interaction: discord.Interaction):
         await interaction.response.defer(ephemeral=False)
         if self.vc == None or not self.vc.is_connected():
             await interaction.followup.send("I must be in a Voice Channel to use this command!")
-
+            
         elif self.playing:
             self.playing = False
             self.paused = True
@@ -111,6 +111,7 @@ class Music(commands.Cog):
         await interaction.response.defer(ephemeral=False)
         if self.vc == None or not self.vc.is_connected():
             await interaction.followup.send("I must be in a Voice Channel to use this command!")
+            return 0
         elif self.vc != None and self.playing:
             self.vc.stop()
         self.music_queue.clear()
@@ -161,11 +162,11 @@ class Music(commands.Cog):
             # Try to connect to voice channel if it is not already connected
             if self.vc == None or not self.vc.is_connected():
                 self.vc = await self.music_queue[0][1].connect()
-
                 # Failed to connect
                 if self.vc == None:
                     await ctx.send("Could not connect to the voice channel.")
                     return
+                
             else:
                 await self.vc.move_to(self.music_queue[0][1])
 

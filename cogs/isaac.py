@@ -20,31 +20,31 @@ class Isaac(commands.Cog):
         # Get image
         await interaction.response.defer(ephemeral=False)
         response = requests.get(link)
-        if response.status_code == 200:
-            with open("images/temp/image.png", "wb") as f:
-                f.write(response.content)
-
-            # Edit image
-            image = Image.open("images/temp/image.png")
-            shortest_length = min(image.size)
-            xresize = random.randint(
-                int(shortest_length/12), int(shortest_length/8))
-            yresize = random.randint(
-                int(shortest_length/10), int(shortest_length/7))
-            isaac = Image.open("images/isaacCircle.png").resize((xresize, yresize))
-            xoff = random.randint(0, image.size[0]-isaac.size[0])
-            yoff = random.randint(0, image.size[1]-isaac.size[1])
-
-            image.paste(isaac, (xoff, yoff), mask=isaac)
-            image.save("images/temp/image2.png")
-
-            # Return image
-            em = discord.Embed()
-            file = discord.File("images/temp/image2.png")
-            em.set_image(url="attachment://image2.png")
-            await interaction.followup.send(file=file, embed=em)
-        else:
+        if response.status_code != 200:
             await interaction.followup.send("Could not fetch image.")
+            return 0
+        
+        with open("images/temp/image.png", "wb") as f:
+            f.write(response.content)
+        # Edit image
+        image = Image.open("images/temp/image.png")
+        shortest_length = min(image.size)
+        xresize = random.randint(
+            int(shortest_length/12), int(shortest_length/8))
+        yresize = random.randint(
+            int(shortest_length/10), int(shortest_length/7))
+        isaac = Image.open("images/isaacCircle.png").resize((xresize, yresize))
+        xoff = random.randint(0, image.size[0]-isaac.size[0])
+        yoff = random.randint(0, image.size[1]-isaac.size[1])
+
+        image.paste(isaac, (xoff, yoff), mask=isaac)
+        image.save("images/temp/image2.png")
+
+        # Return image
+        em = discord.Embed()
+        file = discord.File("images/temp/image2.png")
+        em.set_image(url="attachment://image2.png")
+        await interaction.followup.send(file=file, embed=em)
             
 
 async def setup(bot):
