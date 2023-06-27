@@ -17,8 +17,9 @@ class Isaac(commands.Cog):
     @app_commands.command(name="isaac", description="Add Isaac to a linked image.")
     @app_commands.describe(link="Link to the image.")
     async def isaac(self, interaction: discord.Interaction, link: str):
-        # Get image
         await interaction.response.defer(ephemeral=False)
+        
+        # Get image
         response = requests.get(link)
         if response.status_code != 200:
             await interaction.followup.send("Could not fetch image.")
@@ -26,26 +27,41 @@ class Isaac(commands.Cog):
         
         with open("images/temp/image.png", "wb") as f:
             f.write(response.content)
-        # Edit image
-        image = Image.open("images/temp/image.png")
-        shortest_length = min(image.size)
-        xresize = random.randint(
-            int(shortest_length/12), int(shortest_length/8))
-        yresize = random.randint(
-            int(shortest_length/10), int(shortest_length/7))
-        isaac = Image.open("images/isaacCircle.png").resize((xresize, yresize))
-        xoff = random.randint(0, image.size[0]-isaac.size[0])
-        yoff = random.randint(0, image.size[1]-isaac.size[1])
-
-        image.paste(isaac, (xoff, yoff), mask=isaac)
-        image.save("images/temp/image2.png")
+            
+        edit_image(Image.open("images/temp/image.png"))
 
         # Return image
         em = discord.Embed()
         file = discord.File("images/temp/image2.png")
         em.set_image(url="attachment://image2.png")
         await interaction.followup.send(file=file, embed=em)
+
             
+    @app_commands.command(name="reisaac", description="Add another Isaac to the last image.")
+    async def reisaac(self, interaction: discord.Interaction):
+        await interaction.response.defer(ephemeral=False)
+        
+        edit_image(Image.open("images/temp/image2.png"))
+
+        # Return image
+        em = discord.Embed()
+        file = discord.File("images/temp/image2.png")
+        em.set_image(url="attachment://image2.png")
+        await interaction.followup.send(file=file, embed=em)
+
+
+def edit_image(image):
+    shortest_length = min(image.size)
+    xresize = random.randint(
+        int(shortest_length/12), int(shortest_length/8))
+    yresize = random.randint(
+        int(shortest_length/10), int(shortest_length/7))
+    isaac = Image.open("images/isaacCircle.png").resize((xresize, yresize))
+    xoff = random.randint(0, image.size[0]-isaac.size[0])
+    yoff = random.randint(0, image.size[1]-isaac.size[1])
+
+    image.paste(isaac, (xoff, yoff), mask=isaac)
+    image.save("images/temp/image2.png")
 
 async def setup(bot):
     await bot.add_cog(Isaac(bot))
