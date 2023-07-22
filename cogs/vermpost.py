@@ -27,7 +27,11 @@ class Vermpost(commands.Cog):
     @tasks.loop(time=time)
     async def daily_post(self):
         for channel in generals:
-            await channel.send(embed=await get_post())
+            returned_post = await get_post()
+            if isinstance(returned_post, str):
+                await channel.send(returned_post)
+            else:
+                await channel.send(embed=returned_post)
 
 
     @app_commands.command(name="verm", description="Get a random vermuth post.")
