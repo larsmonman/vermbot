@@ -32,7 +32,15 @@ class Vermpost(commands.Cog):
 
     @app_commands.command(name="verm", description="Get a random vermuth post.")
     async def get_post(self, interaction: discord.Interaction):
-        await interaction.response.send_message(embed=await get_post())
+        await interaction.response.defer(ephemeral=False)
+        returned_post = await get_post()
+        if isinstance(returned_post, str):
+            await interaction.followup.send(returned_post)
+        else:
+            await interaction.followup.send(embed=returned_post)
+
+
+
 
 
 async def get_post():
@@ -41,30 +49,37 @@ async def get_post():
                               user_agent="prawer")
 
     subs = [
-        "evangelionmemes", "tf2", "smite", "okbuddyretard",
-        "jerma985", "greentext", "okbuddyfortnite", "TrueSTL", "bonehurtingjuice", "Pikmin"
+        "evangelionmemes", "tf2", "okbuddyretard",
+        "jerma985", "TrueSTL", "bonehurtingjuice", "Pikmin", "Paladins"
     ]
-    filetypes = [".png", ".jpg", ".gif", ".mp4", ".webm"]
+    # subs = ["gifs"]
+    filetypes = ["image", "hosted:video", "rich:video"]
     top_posts = []
 
-    # Select a random sub, search top 30 posts for posts that contain a correct filetype
+    # Select a random sub, search top 15 posts for posts that contain a correct filetype
     selected_sub = random.choice(subs)
     subreddit = await reddit.subreddit(selected_sub)
-    async for post in subreddit.top(time_filter="month", limit=30):
-        for filetype in filetypes:
-            if post.url.endswith(filetype):
-                top_posts.append(post)
-                break
+    async for post in subreddit.top(time_filter="week", limit=15):
+        if hasattr(post, 'post_hint'):
+            hint = post.post_hint
+            
+            for filetype in filetypes:
+                if hint == filetype:
+                    top_posts.append(post)
+                    break
 
     await reddit.close()
 
     selected_post = random.choice(top_posts)
 
     # Embed result
-    em = discord.Embed(title=selected_post.title)
-    em.set_image(url=selected_post.url)
-
-    return em
+    if selected_post.post_hint == "image":
+        em = discord.Embed(title=selected_post.title)
+        em.set_image(url=selected_post.url)
+        return em
+    else:
+        # Videos, let Discord auto-embed
+        return "https://www.reddit.com/" + selected_post.permalink
 
 
 async def setup(bot):
