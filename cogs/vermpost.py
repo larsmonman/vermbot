@@ -54,7 +54,7 @@ async def get_post():
 
     subs = [
         "evangelionmemes", "tf2", "okbuddyretard",
-        "jerma985", "TrueSTL", "bonehurtingjuice", "Pikmin", "Paladins"
+        "jerma985", "TrueSTL", "bonehurtingjuice", "Pikmin", "Paladins", "bindingofisaac"
     ]
     # subs = ["gifs"]
     filetypes = ["image", "hosted:video", "rich:video"]
