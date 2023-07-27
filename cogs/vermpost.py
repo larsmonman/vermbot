@@ -23,7 +23,7 @@ class Vermpost(commands.Cog):
             for channel in guild.text_channels:
                 if channel.name == "general":
                     generals.append(channel)
-        
+    
     @tasks.loop(time=time)
     async def daily_post(self):
         for channel in generals:
@@ -33,7 +33,7 @@ class Vermpost(commands.Cog):
             else:
                 await channel.send(embed=returned_post)
 
-
+    # Manual command
     @app_commands.command(name="verm", description="Get a random vermuth post.")
     async def get_post(self, interaction: discord.Interaction):
         await interaction.response.defer(ephemeral=False)
@@ -54,13 +54,13 @@ async def get_post():
 
     subs = [
         "evangelionmemes", "tf2", "okbuddyretard",
-        "jerma985", "TrueSTL", "bonehurtingjuice", "Pikmin", "Paladins", "bindingofisaac"
+        "jerma985", "TrueSTL", "bonehurtingjuice", "Pikmin", "bindingofisaac"
     ]
     # subs = ["gifs"]
     filetypes = ["image", "hosted:video", "rich:video"]
     top_posts = []
 
-    # Select a random sub, search top 15 posts for posts that contain a correct filetype
+    # Select a random sub, search top 15 posts for posts that contain correct post_hint
     selected_sub = random.choice(subs)
     subreddit = await reddit.subreddit(selected_sub)
     async for post in subreddit.top(time_filter="week", limit=15):
@@ -71,7 +71,7 @@ async def get_post():
                 if hint == filetype:
                     top_posts.append(post)
                     break
-
+    
     await reddit.close()
 
     selected_post = random.choice(top_posts)
