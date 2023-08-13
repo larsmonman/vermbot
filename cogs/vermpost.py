@@ -39,10 +39,14 @@ class Vermpost(commands.Cog):
         await interaction.response.defer(ephemeral=False)
         returned_post = await get_post()
         if isinstance(returned_post, str):
-            await interaction.followup.send(returned_post)
+            msg = await interaction.followup.send(returned_post)
+            await msg.add_reaction("👍")
+            await msg.add_reaction("👎")
         else:
-            await interaction.followup.send(embed=returned_post)
-
+            msg = await interaction.followup.send(embed=returned_post)
+            await msg.add_reaction("👍")
+            await msg.add_reaction("👎")
+            
 
 
 
