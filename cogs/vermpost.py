@@ -29,9 +29,13 @@ class Vermpost(commands.Cog):
         for channel in generals:
             returned_post = await get_post()
             if isinstance(returned_post, str):
-                await channel.send(returned_post)
+                msg = await channel.send(returned_post)
+                await msg.add_reaction("👍")
+                await msg.add_reaction("👎")
             else:
                 await channel.send(embed=returned_post)
+                await msg.add_reaction("👍")
+                await msg.add_reaction("👎")
 
     # Manual command
     @app_commands.command(name="verm", description="Get a random vermuth post.")
