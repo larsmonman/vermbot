@@ -30,12 +30,10 @@ class Vermpost(commands.Cog):
             returned_post = await get_post()
             if isinstance(returned_post, str):
                 msg = await channel.send(returned_post)
-                await msg.add_reaction("👍")
-                await msg.add_reaction("👎")
             else:
-                await channel.send(embed=returned_post)
-                await msg.add_reaction("👍")
-                await msg.add_reaction("👎")
+                msg = await channel.send(embed=returned_post)
+            await msg.add_reaction("👍")
+            await msg.add_reaction("👎")
 
     # Manual command
     @app_commands.command(name="verm", description="Get a random vermuth post.")
@@ -44,12 +42,10 @@ class Vermpost(commands.Cog):
         returned_post = await get_post()
         if isinstance(returned_post, str):
             msg = await interaction.followup.send(returned_post)
-            await msg.add_reaction("👍")
-            await msg.add_reaction("👎")
         else:
             msg = await interaction.followup.send(embed=returned_post)
-            await msg.add_reaction("👍")
-            await msg.add_reaction("👎")
+        await msg.add_reaction("👍")
+        await msg.add_reaction("👎")
             
 
 
