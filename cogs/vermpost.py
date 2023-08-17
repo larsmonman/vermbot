@@ -8,6 +8,7 @@ import datetime
 
 time = datetime.time(hour=10, minute=00)
 generals = []
+subs = []
 
 
 class Vermpost(commands.Cog):
@@ -55,17 +56,20 @@ async def get_post():
     reddit = asyncpraw.Reddit(client_id=os.getenv("client_id"),
                               client_secret=os.getenv("client_secret"),
                               user_agent="prawer")
-
-    subs = [
+    if not subs:
+        subs = [
         "evangelionmemes", "tf2", "okbuddyretard",
         "jerma985", "TrueSTL", "bonehurtingjuice", "Pikmin", "bindingofisaac"
-    ]
-    # subs = ["gifs"]
+        ]
+        
+
     filetypes = ["image", "hosted:video", "rich:video"]
     top_posts = []
 
-    # Select a random sub, search top 15 posts for posts that contain correct post_hint
-    selected_sub = random.choice(subs)
+    # Shuffle and pop subs to get a random one, search top 15 posts from last week that contain correct post_hint
+    # Pops to get posts from a variety of subs to reduce the chance of dupes during burst usage
+    random.shuffle(subs)
+    selected_sub = subs.pop()
     subreddit = await reddit.subreddit(selected_sub)
     async for post in subreddit.top(time_filter="week", limit=15):
         if hasattr(post, 'post_hint'):
@@ -80,13 +84,12 @@ async def get_post():
 
     selected_post = random.choice(top_posts)
 
-    # Embed result
+    # Embed images, let Discord auto-embed videos
     if selected_post.post_hint == "image":
         em = discord.Embed(title=selected_post.title)
         em.set_image(url=selected_post.url)
         return em
     else:
-        # Videos, let Discord auto-embed
         return "https://www.reddit.com/" + selected_post.permalink
 
 
