@@ -57,7 +57,9 @@ async def get_avatar(interaction):
         f.write(response.content)
         
     color_thief = ColorThief("images/temp/avatar.png")
-    dominant_color = color_thief.get_color(quality=3)
+    
+    # This is purely so that my color is selected as pink
+    dominant_color = color_thief.get_palette(color_count=3, quality=1)[2]
     return dominant_color
 
 
