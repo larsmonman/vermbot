@@ -28,18 +28,23 @@ class Vermpost(commands.Cog):
     async def daily_post(self):
         for channel in generals:
             returned_post = await get_post()
+            print("Daily!")
             if isinstance(returned_post, str):
-                msg = await channel.send(returned_post)
+                msg = await channel.send(content=returned_post)
+                print("Daily content!")
             else:
                 msg = await channel.send(embed=returned_post)
+                print("Daily embed!")
             await msg.add_reaction("👍")
             await msg.add_reaction("👎")
+            print("Reactions added")
 
     # Manual command
     @app_commands.command(name="verm", description="Get a random vermuth post.")
     async def get_post(self, interaction: discord.Interaction):
         await interaction.response.defer(ephemeral=False)
         returned_post = await get_post()
+        print("Command!")
         if isinstance(returned_post, str):
             msg = await interaction.followup.send(returned_post)
         else:
