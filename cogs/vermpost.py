@@ -10,6 +10,15 @@ time = datetime.time(hour=10, minute=00)
 generals = []
 subs = []
 
+import logging
+
+handler = logging.StreamHandler()
+handler.setLevel(logging.DEBUG)
+for logger_name in ("asyncpraw", "asyncprawcore"):
+    logger = logging.getLogger(logger_name)
+    logger.setLevel(logging.DEBUG)
+    logger.addHandler(handler)
+
 emojis_list = ["ratzjoy", "ratzsurprise", "ratzsadness", "ratzanger", "ratzneutral", "ratzfear", "ratzdisgust", "clueless"]
 
 class Vermpost(commands.Cog):
@@ -56,7 +65,6 @@ async def get_post():
     reddit = asyncpraw.Reddit(client_id=os.getenv("client_id"),
                               client_secret=os.getenv("client_secret"),
                               user_agent="prawer")
-    
     global subs
     full_subs_list = [
         "evangelionmemes", "tf2", "okbuddyretard",
@@ -83,8 +91,6 @@ async def get_post():
                 if hint == filetype:
                     top_posts.append(post)
                     break
-    
-    await reddit.close()
 
     selected_post = random.choice(top_posts)
 
