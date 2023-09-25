@@ -93,6 +93,7 @@ class Music(commands.Cog):
     @app_commands.command(name="queue", description="Display the current songs in queue.")
     async def queue(self, interaction: discord.Interaction):
         await interaction.response.defer(ephemeral=False)
+        print(self.music_queue)
         q = ""
         for i in range((len(self.music_queue))):
             if i == 0:
@@ -151,6 +152,7 @@ class Music(commands.Cog):
             self.vc.play(discord.PCMVolumeTransformer(original=discord.FFmpegPCMAudio(
                 m_url, **self.FFMPEG_OPTIONS), volume=self.volume), after=lambda e: self.play_next())
         else:
+            self.music_queue.popleft()
             self.playing = False
 
     async def play_music(self, ctx):

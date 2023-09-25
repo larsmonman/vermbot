@@ -10,6 +10,8 @@ time = datetime.time(hour=10, minute=00)
 generals = []
 subs = []
 
+emojis_list = ["ratzjoy", "ratzsurprise", "ratzsadness", "ratzanger", "ratzneutral", "ratzfear", "ratzdisgust", "clueless"]
+
 class Vermpost(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
@@ -28,16 +30,11 @@ class Vermpost(commands.Cog):
     async def daily_post(self):
         for channel in generals:
             returned_post = await get_post()
-            print("Daily!")
             if isinstance(returned_post, str):
                 msg = await channel.send(content=returned_post)
-                print("Daily content!")
             else:
                 msg = await channel.send(embed=returned_post)
-                print("Daily embed!")
-            await msg.add_reaction("👍")
-            await msg.add_reaction("👎")
-            print("Reactions added")
+            await add_reactions(msg, channel.guild.emojis)
 
     # Manual command
     @app_commands.command(name="verm", description="Get a random vermuth post.")
@@ -49,8 +46,7 @@ class Vermpost(commands.Cog):
             msg = await interaction.followup.send(returned_post)
         else:
             msg = await interaction.followup.send(embed=returned_post)
-        await msg.add_reaction("👍")
-        await msg.add_reaction("👎")
+        await add_reactions(msg, interaction.guild.emojis)
             
 
  
@@ -99,6 +95,17 @@ async def get_post():
         return em
     else:
         return "https://www.reddit.com/" + selected_post.permalink
+
+
+async def add_reactions(msg, emojis):
+    await msg.add_reaction("👍")
+    await msg.add_reaction("👎")
+    for emoji_name in emojis_list:
+        emoji = discord.utils.get(emojis, name=emoji_name)
+        if emoji is None:
+            print("Emoji not found.")
+            continue
+        await msg.add_reaction(emoji)
 
 
 async def setup(bot):
