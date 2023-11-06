@@ -6,7 +6,7 @@ import asyncpraw
 import os
 import datetime
 
-time = datetime.time(hour=10, minute=00)
+time = datetime.time(hour=11, minute=00)
 generals = []
 subs = []
 
@@ -94,13 +94,13 @@ async def get_post():
 
     selected_post = random.choice(top_posts)
 
-    # Embed images, let Discord auto-embed rich videos. Reddit hosted videos cannot play embeded due to Discord limitations.
+    # Embed images, let Discord auto-embed rich videos. Reddit hosted videos is linked as rxddit for Discord embeds.
     if selected_post.post_hint == "image":
         em = discord.Embed(title=selected_post.title)
         em.set_image(url=selected_post.url)
         return em
     else:
-        return "https://www.reddit.com/" + selected_post.permalink
+        return "https://www.rxddit.com" + selected_post.permalink
 
 
 async def add_reactions(msg, emojis):

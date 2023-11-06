@@ -149,7 +149,7 @@ class Music(commands.Cog):
             self.music_queue.popleft()
 
             self.vc.play(discord.PCMVolumeTransformer(original=discord.FFmpegPCMAudio(
-                m_url, **self.FFMPEG_OPTIONS), volume=self.volume), after=lambda e: self.play_next())
+                m_url, **self.FFMPEG_OPTIONS), volume=self.volume), after=lambda: self.play_next())
         else:
             self.music_queue.popleft()
             self.playing = False
@@ -174,7 +174,7 @@ class Music(commands.Cog):
             await self.music_queue[0][2].send(f'''Now playing: "{self.music_queue[0][0]['title']}"''')
 
             self.vc.play(discord.PCMVolumeTransformer(original=discord.FFmpegPCMAudio(
-                m_url, **self.FFMPEG_OPTIONS), volume=self.volume), after=lambda e: self.play_next())
+                m_url, **self.FFMPEG_OPTIONS), volume=self.volume), after=lambda: self.play_next())
         else:
             self.playing = False
 
