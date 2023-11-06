@@ -86,7 +86,6 @@ class Music(commands.Cog):
         else:
             self.vc.stop()
             self.paused = False
-            self.music_queue.popleft()
             await interaction.followup.send("Skipping...")
             await self.play_music(interaction.user.voice.channel)
 
