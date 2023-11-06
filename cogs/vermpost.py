@@ -9,6 +9,7 @@ import datetime
 time = datetime.time(hour=11, minute=00)
 generals = []
 subs = []
+black_list = []
 
 import logging
 
@@ -50,7 +51,6 @@ class Vermpost(commands.Cog):
     async def get_post(self, interaction: discord.Interaction):
         await interaction.response.defer(ephemeral=False)
         returned_post = await get_post()
-        print("Command!")
         if isinstance(returned_post, str):
             msg = await interaction.followup.send(returned_post)
         else:
@@ -92,8 +92,17 @@ async def get_post():
                     top_posts.append(post)
                     break
 
-    selected_post = random.choice(top_posts)
-
+    while True:
+        selected_post = random.choice(top_posts)
+        if selected_post in black_list:
+            selected_post = []
+        print("looping")
+        if selected_post:
+            break
+        
+    black_list.append(selected_post)
+    print(black_list)
+    
     # Embed images, let Discord auto-embed rich videos. Reddit hosted videos is linked as rxddit for Discord embeds.
     if selected_post.post_hint == "image":
         em = discord.Embed(title=selected_post.title)
