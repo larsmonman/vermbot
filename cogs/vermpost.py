@@ -80,6 +80,9 @@ async def get_post():
     # Shuffle and pop subs to get a random one, search top 15 posts from last week that contain correct post_hint
     # Pops to get posts from a variety of subs to reduce the chance of dupes during burst usage
     random.shuffle(subs)
+    
+    
+    
     selected_sub = subs.pop()
     print(subs)
     subreddit = await reddit.subreddit(selected_sub)
@@ -92,13 +95,17 @@ async def get_post():
                     top_posts.append(post)
                     break
 
-    while True:
-        selected_post = random.choice(top_posts)
+    while top_posts:
+        random.shuffle(top_posts)
+        selected_post = top_posts.pop()
         if selected_post in black_list:
             selected_post = []
-        print("looping")
+            
         if selected_post:
             break
+        else:
+            return "No post found in " + selected_sub + ", try again!"
+                
         
     black_list.append(selected_post)
     print(black_list)

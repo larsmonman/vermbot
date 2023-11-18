@@ -87,7 +87,7 @@ class Music(commands.Cog):
             self.vc.stop()
             self.paused = False
             await interaction.followup.send("Skipping...")
-            await self.play_music(interaction.user.voice.channel)
+            self.play_next(interaction.user.voice.channel)
 
     @app_commands.command(name="queue", description="Display the current songs in queue.")
     async def queue(self, interaction: discord.Interaction):
@@ -147,9 +147,10 @@ class Music(commands.Cog):
 
             # Remove the last song from queue
             self.music_queue.popleft()
+            print(self.music_queue)
 
             self.vc.play(discord.PCMVolumeTransformer(original=discord.FFmpegPCMAudio(
-                m_url, **self.FFMPEG_OPTIONS), volume=self.volume), after=lambda: self.play_next())
+                m_url, **self.FFMPEG_OPTIONS), volume=self.volume), after=lambda e: self.play_next())
         else:
             self.music_queue.popleft()
             self.playing = False
@@ -174,7 +175,7 @@ class Music(commands.Cog):
             await self.music_queue[0][2].send(f'''Now playing: "{self.music_queue[0][0]['title']}"''')
 
             self.vc.play(discord.PCMVolumeTransformer(original=discord.FFmpegPCMAudio(
-                m_url, **self.FFMPEG_OPTIONS), volume=self.volume), after=lambda: self.play_next())
+                m_url, **self.FFMPEG_OPTIONS), volume=self.volume), after=lambda e: self.play_next())
         else:
             self.playing = False
 
