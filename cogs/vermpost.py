@@ -6,7 +6,7 @@ import asyncpraw
 import os
 import datetime
 
-time = datetime.time(hour=11, minute=00)
+time = datetime.time(hour=11, minute=0, second=0)
 generals = []
 subs = []
 black_list = []
@@ -48,7 +48,7 @@ class Vermpost(commands.Cog):
 
     # Manual command
     @app_commands.command(name="verm", description="Get a random vermuth post.")
-    async def get_post(self, interaction: discord.Interaction):
+    async def verm_command(self, interaction: discord.Interaction):
         await interaction.response.defer(ephemeral=False)
         returned_post = await get_post()
         if isinstance(returned_post, str):
