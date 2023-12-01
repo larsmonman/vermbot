@@ -86,7 +86,7 @@ async def get_post():
     selected_sub = subs.pop()
     print(subs)
     subreddit = await reddit.subreddit(selected_sub)
-    async for post in subreddit.top(time_filter="week", limit=15):
+    async for post in subreddit.top(time_filter="week", limit=20):
         if hasattr(post, 'post_hint'):
             hint = post.post_hint
             
