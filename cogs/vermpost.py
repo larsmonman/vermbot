@@ -68,7 +68,7 @@ async def get_post():
     global subs
     full_subs_list = [
         "evangelionmemes", "tf2", "okbuddyretard",
-        "jerma985", "TrueSTL", "bonehurtingjuice", "Pikmin", "bindingofisaac"
+        "jerma985", "TrueSTL", "bonehurtingjuice", "Pikmin"
         ]
     if not subs:
         subs = full_subs_list
