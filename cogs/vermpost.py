@@ -68,7 +68,7 @@ async def get_post():
     global subs
     full_subs_list = [
         "evangelionmemes", "tf2", "okbuddyretard",
-        "jerma985", "TrueSTL", "bonehurtingjuice", "Pikmin", "OKbuddyHalfLife"
+        "blackmagicfuckery", "TrueSTL", "bonehurtingjuice", "Pikmin", "OKbuddyHalfLife"
         ]
     if not subs:
         subs = full_subs_list
@@ -77,8 +77,8 @@ async def get_post():
     filetypes = ["image", "hosted:video", "rich:video"]
     top_posts = []
 
-    # Shuffle and pop subs to get a random one, search top 15 posts from last week that contain correct post_hint
-    # Pops to get posts from a variety of subs to reduce the chance of dupes during burst usage
+    # Shuffle and pop subs to get a random one, search top posts from last week that contain correct post_hint
+    # Pops to get posts from a variety of subs
     random.shuffle(subs)
     
     
