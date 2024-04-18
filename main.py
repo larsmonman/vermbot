@@ -10,7 +10,7 @@ intents = discord.Intents.default()
 intents.message_content = True
 intents.messages = True
 bot = commands.Bot(command_prefix=".", intents=intents)
-
+load_dotenv()
 
 @bot.event
 async def on_ready():
