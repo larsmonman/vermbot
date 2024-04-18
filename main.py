@@ -27,7 +27,6 @@ async def main():
     async with bot:
         await load()
         await bot.start(os.getenv("TOKEN"))
-        await bot.start(token)        
 asyncio.run(main())
 
 
