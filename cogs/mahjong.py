@@ -34,7 +34,7 @@ def createImage():
         text = getText()
         W = img.width
         H = img.height
-        fontSize = W/20
+        fontSize = int(W/20)
         #Fonts are located in the fonts folder
         font = ImageFont.truetype("fonts/impact.ttf", fontSize)
         fill_color = (255, 255, 255)
@@ -42,8 +42,9 @@ def createImage():
         drawer = ImageDraw.Draw(img)
         textLength = text.count("\n")+1
         #Scales text based on size of image and length of text
-        drawer.text((W/5,(H/2)-textLength*fontSize/1.75), text, font=font, fill=fill_color, stroke_width=5, stroke_fill=stroke_color)
+        drawer.text(int(W/5),int(((H/2)-textLength*fontSize/1.75)), text, font=font, fill=fill_color, stroke_width=5, stroke_fill=stroke_color)
         img.save("images/temp/mahjongtemp.png")
+        img.close
 
 #Gets a random quote from mahjong.txt, then formats it with newlines
 def getText():
