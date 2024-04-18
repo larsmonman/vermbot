@@ -42,9 +42,9 @@ def createImage():
         drawer = ImageDraw.Draw(img)
         textLength = text.count("\n")+1
         #Scales text based on size of image and length of text
-
         drawer.text((int(W/5),int((H/2)-textLength*fontSize/1.75)), text, font=font, fill=fill_color, stroke_width=5, stroke_fill=stroke_color)
         img.save("images/temp/mahjongtemp.png")
+        img.close()
 
 #Gets a random quote from mahjong.txt, then formats it with newlines
 def getText():
