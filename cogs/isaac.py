@@ -93,6 +93,9 @@ def edit_image(image, color):
     image.paste(rotated_arrow, (int(c_center[0] - rotated_arrow.width/2 + arrow_vector[0]/2),
                                 int(c_center[1] - rotated_arrow.height/2 - arrow_vector[1]/2)), mask=rotated_arrow)
     image.save("images/temp/image2.png")
+    red_circle.close
+    red_arrow.close
+    isaac.close
     
 async def return_image(interaction):
     em = discord.Embed()
@@ -128,7 +131,6 @@ def tint(image, color):
     img = image.convert('RGBA')
     arr = np.array(np.asarray(img).astype('float'))
     new_img = Image.fromarray(set_hs(arr, hue, sat/2).astype('uint8'), 'RGBA')
-
     return new_img
     
     

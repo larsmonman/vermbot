@@ -13,12 +13,14 @@ class Admin(commands.Cog):
 
     @app_commands.command(name="sync", description="Lars only")
     async def sync(self, interaction: discord.Interaction):
-        if interaction.user.id == 98843874872557568:
+        if interaction.user.id == 98843874872557568 or interaction.user.id == 221618153376055296:
             await self.bot.tree.sync()
             print("Command tree synced.")
             await interaction.response.send_message("Got it boss!")
+        elif interaction.user.id == 123454594306015232:
+            await interaction.response.send_message("Go fuck yourself")            
         else:
-            await interaction.response.send_message("You must be Lars to use this command!")
+            await interaction.response.send_message("You must be Lars or Runar to use this command!")
 
 
 async def setup(bot):
