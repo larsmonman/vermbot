@@ -34,9 +34,12 @@ def createImage():
         text = getText()
         W = img.width
         H = img.height
-        fontSize = W/20
+        fontSize = int(W/20)
         #Fonts are located in the fonts folder
-        font = ImageFont.truetype("fonts/impact.ttf", fontSize)
+        try:
+            font = ImageFont.truetype("fonts/impact.ttf", fontSize)
+        except Exception as e:
+            print("Error:", e)
         fill_color = (255, 255, 255)
         stroke_color = (0, 0, 0)
         drawer = ImageDraw.Draw(img)
