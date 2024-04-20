@@ -182,7 +182,6 @@ class Music(commands.Cog):
 
 def shortLinkToFulllink(link:str):
     if "youtu.be" in link:
-        link = "https://youtu.be/z3KNCeuxtYw"
         location=(link.rfind("/"))+1
         link=link[location:]
         link="https://www.youtube.com/watch?v="+link
