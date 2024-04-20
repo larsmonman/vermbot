@@ -35,6 +35,7 @@ class Music(commands.Cog):
         if voice_channel is None:
             await interaction.followup.send("You must be in a Voice Channel to use this command!")
             return 0
+        link=shortLinkToFulllink(link)
         song = self.search_yt(link)
         if type(song) == type(True):
             await interaction.followup.send("Could not download the song, likely a faulty URL. Try again.")
@@ -179,6 +180,15 @@ class Music(commands.Cog):
         else:
             self.playing = False
 
+def shortLinkToFulllink(link:str):
+    if "youtu.be" in link:
+        link = "https://youtu.be/z3KNCeuxtYw"
+        location=(link.rfind("/"))+1
+        link=link[location:]
+        link="https://www.youtube.com/watch?v="+link
+        return link
+    else:
+        return link
 
 async def setup(bot):
     await bot.add_cog(Music(bot))

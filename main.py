@@ -5,6 +5,7 @@ import asyncio
 import os
 from dotenv.main import load_dotenv
 
+
 # Misc setup
 intents = discord.Intents.default()
 intents.message_content = True
