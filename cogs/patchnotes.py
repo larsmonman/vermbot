@@ -1,5 +1,5 @@
-from discord.ext import commands
 from discord import app_commands
+from discord.ext import commands, tasks
 import discord
 
 generals = []
@@ -12,13 +12,14 @@ class Patchnotes(commands.Cog):
     @commands.Cog.listener()
     async def on_ready(self):
         print('Patchnotes cog loaded.')
+
         for guild in self.bot.guilds:
             for channel in guild.text_channels:
                 if channel.name == "general":
                     generals.append(channel)
 
 
-    @app_commands.command(name="sync", description="Lars/Runar only")
+    @app_commands.command(name="patchnotes", description="Lars/Runar only")
     @app_commands.describe(text="Patch notes, seperate with **")
     async def sync(self, interaction: discord.Interaction, text:str=None):
         if interaction.user.id == 98843874872557568 or interaction.user.id == 221618153376055296:
