@@ -22,6 +22,6 @@ class Admin(commands.Cog):
         else:
             await interaction.response.send_message("You must be Lars or Runar to use this command!")
 
-
+ 
 async def setup(bot):
     await bot.add_cog(Admin(bot))
