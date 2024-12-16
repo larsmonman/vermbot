@@ -36,15 +36,15 @@ class Vermpost(commands.Cog):
                 if channel.name == "general":
                     generals.append(channel)
     
-    @tasks.loop(time=time)
-    async def daily_post(self):
-        for channel in generals:
-            returned_post = await get_post()
-            if isinstance(returned_post, str):
-                msg = await channel.send(content=returned_post)
-            else:
-                msg = await channel.send(embed=returned_post)
-            await add_reactions(msg, channel.guild.emojis)
+    # @tasks.loop(time=time)
+    # async def daily_post(self):
+    #     for channel in generals:
+    #         returned_post = await get_post()
+    #         if isinstance(returned_post, str):
+    #             msg = await channel.send(content=returned_post)
+    #         else:
+    #             msg = await channel.send(embed=returned_post)
+    #         await add_reactions(msg, channel.guild.emojis)
 
     # Manual command
     @app_commands.command(name="verm", description="Get a random vermuth post.")
