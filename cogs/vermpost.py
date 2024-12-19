@@ -25,7 +25,7 @@ emojis_list = ["ratzjoy", "ratzsurprise", "ratzsadness", "ratzanger", "ratzneutr
 class Vermpost(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self.daily_post.start()
+        # self.daily_post.start()
 
     @commands.Cog.listener()
     async def on_ready(self):
